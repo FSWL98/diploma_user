@@ -9,6 +9,7 @@ import { classNames } from 'primereact/utils';
 
 const LoginForm = ({ onLoginSuccess }) => {
   const [isLogging, setIsLogging] = useState(false);
+  const [error, setError] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -39,11 +40,14 @@ const LoginForm = ({ onLoginSuccess }) => {
   };
 
   const handleFormSubmit = (data) => {
-    console.log(process.env);
     setIsLogging(true);
     AuthService.authorize(data.email, data.password)
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e))
+      .then((res) => {
+        if (res.error)
+          setError(res.message)
+        else
+          onLoginSuccess()
+      })
       .finally(() => setIsLogging(false))
   }
 
@@ -73,6 +77,7 @@ const LoginForm = ({ onLoginSuccess }) => {
         />
         {getFormErrorMessage('password')}
       </div>
+      <small className='p-error block mb-2'>{error}</small>
       <Button
         className='align-self-center'
         type='submit'

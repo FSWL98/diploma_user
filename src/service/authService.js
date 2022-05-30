@@ -9,6 +9,10 @@ export class AuthService extends BaseService {
     return localStorage.getItem('token');
   }
 
+  static getUser() {
+    return JSON.parse(localStorage.getItem('user'));
+  }
+
   static async authorize(user, password) {
     const data = {
       'email': user,
@@ -17,9 +21,26 @@ export class AuthService extends BaseService {
     const options = {
       mode: 'cors',
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     };
-    return await this.request(`${process.env.BASE_API_URL}/auth/user/login`, options);
+    const response = await this.request(`${process.env.BASE_API_URL}/auth/user/login`, options);
+    if (response.error)
+      return response;
+    localStorage.setItem('token', response.access_token);
+    return this.getUserInfo();
+  }
+
+  static async getUserInfo() {
+    const options = {
+      mode: 'cors',
+      method: 'GET'
+    };
+    const response = await this.authRequest(`${process.env.BASE_API_URL}/user/me`, options);
+    localStorage.setItem('user', JSON.stringify(response));
+    return response;
   }
 
   static logout() {
