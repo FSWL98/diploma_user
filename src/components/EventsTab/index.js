@@ -39,7 +39,7 @@ const EventsTab = ({ events, showToast, refetch, criterias }) => {
         return <EventsList
           events={
             events
-            .filter((el) => new Date(el.date_start) > new Date())
+            .filter((el) => new Date(el.date_end) > new Date())
             .sort(sortByDate)
           }
           criterias={criterias}
