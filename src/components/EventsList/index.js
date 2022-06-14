@@ -5,7 +5,7 @@ import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
 import SolutionForm from '../SolutionForm';
 import { Tag } from 'primereact/tag';
 
-const EventsList = ({ events, onRegister, showToast, criterias }) => {
+const EventsList = ({ events,onRegister, showToast, criterias }) => {
   const parseDate = date => {
     const dateString = date.split('T')[0];
     const [year, month, day] = dateString.split('-');
@@ -55,7 +55,7 @@ const EventsList = ({ events, onRegister, showToast, criterias }) => {
       return <Button
         label='Принять участие'
         className='p-button-help'
-        disabled={new Date(el.date_start) < new Date()}
+        disabled={new Date(el.date_end) < new Date()}
         onClick={() => confirm(el)}
       />
     }
